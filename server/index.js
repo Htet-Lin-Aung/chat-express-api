@@ -2,6 +2,7 @@ import http from "http";
 import express from "express";
 import logger from "morgan";
 import cors from "cors";
+import { Server } from "socket.io";
 // routes
 import indexRouter from "../routes/index.js";
 import userRouter from "../routes/user.js";
@@ -11,6 +12,8 @@ import deleteRouter from "../routes/delete.js";
 import { decode } from '../middlewares/jwt.js'
 // mongo connection
 import "../config/mongo.js";
+// socket configuration
+import WebSockets from "../utils/WebSockets.js";
 
 const app = express();
 
@@ -43,3 +46,6 @@ server.listen(port);
 server.on("listening", () => {
   console.log(`Listening on port:: http://localhost:${port}/`)
 });
+/** Create socket connection */
+global.io = new Server(server); // Create Socket.io server
+global.io.on('connection', WebSockets.connection);
