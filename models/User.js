@@ -27,8 +27,8 @@ const userSchema = new mongoose.Schema(
 
 userSchema.statics.createUser = async function (
 	firstName, 
-    	lastName, 
-    	type
+    lastName, 
+    type
 ) {
   try {
     const user = await this.create({ firstName, lastName, type });
@@ -46,7 +46,16 @@ userSchema.statics.getUserById = async function (id) {
     } catch (error) {
       throw error;
     }
-  }
+}
+
+userSchema.statics.getUserByIds = async function (ids) {
+    try {
+      const users = await this.find({ _id: { $in: ids } });
+      return users;
+    } catch (error) {
+      throw error;
+    }
+}
 
   userSchema.statics.getUsers = async function () {
     try {
